@@ -1,0 +1,57 @@
+{
+    "ISC-DATA-SEARCH": {
+        "Address": "http://hdpmaster01.southeastasia.cloudapp.azure.com:9997",
+        "Type": "api",
+        "Path": "isc-ml/",
+        "URL": {
+            "dataSearchConfig": "config/config_iot_export_event_template_id",
+            "dataExportSearch": "job/searchJobs",
+            "viewTaskIdContent": "job/viewjobresult",
+            "taskIdStatus": "job/status",
+            "dataExportCreate": "job/triggerjob",
+            "dataExportDelete": "job/deletejobs",
+            "dataExportRowDetails": "job/viewjob"
+        }
+    },
+    "ISC-MACHINE-LEARN": {
+        "Address": "http://hdpmaster01.southeastasia.cloudapp.azure.com:9997",
+        "Type": "api",
+        "Path": "isc-ml/",
+        "URL": {
+            "machineCreateJob": "bigdata/createJob",
+            "machineSearchJobs": "bigdata/searchJobs",
+            "machineDelete": "bigdata/deleteJobs",
+            "machineUpdateJobStatus": "job/canceljob",
+            "machineGetDataProcessInfo": "job/viewjob",
+            "machineGetModelParameters": "machinelearning/getModelParameters",
+            "machineManagementModelSearch": "machinelearning/searchModels",
+            "machineManagementModelDelete": "machinelearning/deleteModels",
+            "machineManagementModelInfo": "machinelearning/getModel",
+            "machineManagementModelCreate": "machinelearning/importModel",
+            "machineManagementModelUpdate": "machinelearning/updateModel",
+            "machineManagementModelGetContentByUrl": "job/getContentByUrl",
+            "createBigDataConfig": "/config/createConfig/{0}",
+            "createBigDataJob": "/jobtemplate/autoCreatejobtemplate/{0}",
+            "createBigDataAccount": "/tenant/add/{0}"
+        }
+    },
+    "ISC-SERVICE-ASSET": {
+        "Address": "http://hdpworker01.southeastasia.cloudapp.azure.com:9996",
+        "Type": "api",
+        "Path": "ml-deploy/",
+        "URL": {
+            "mlCommonServerList": "MLService/getAssetList",
+            "mlCommonDeleteList": "MLService/deleteAsset",
+            "mlServerDeployModel": "MLService/deployModel",
+            "mlCommonGetOneAsset": "MLService/getOneAsset"
+        }
+    },
+    "ISC-ASSET-SOCKET": {
+        "Address": "ws://hdpworker01.southeastasia.cloudapp.azure.com:9998",
+        "Type": "ws",
+        "Path": "dsearch/",
+        "URL": {
+            "assetSocket": "ws"
+        }
+    }
+}

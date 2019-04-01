@@ -65,81 +65,33 @@
 </template>
 
 <script>
-import NavHeader from '@/components/header'
-import NavFooter from '@/components/footer'
-import axios from 'axios'
-import '@/assets/css/base.css'
-import '@/assets/css/checkout.css'
-import '@/assets/css/login.css'
-import '@/assets/css/product.css'
+import NavHeader from "@/components/header";
+import NavFooter from "@/components/footer";
+import axios from "axios";
+import "@/assets/css/base.css";
+import "@/assets/css/checkout.css";
+import "@/assets/css/login.css";
+import "@/assets/css/product.css";
 export default {
     data () {
         return {
-            goodsList: [
-            {
-            "productId":"10001",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"mi6.jpg"
-        },
-        {
-            "productId":"10002",
-            "productName":"小米笔记本",
-            "prodcutPrice":"3999",
-            "prodcutImg":"note.jpg"
-        },
-        {
-            "productId":"10003",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"mi6.jpg"
-        },
-        {
-            "productId":"10004",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"1.jpg"
-        },
-        {
-            "productId":"10005",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"2.jpg"
-        },
-        {
-            "productId":"10006",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"3.jpg"
-        },
-        {
-            "productId":"10007",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"4.jpg"
-        },
-        {
-            "productId":"10008",
-            "productName":"小米6",
-            "prodcutPrice":"2499",
-            "prodcutImg":"5.jpg"
-        }]
-        }
+            goodsList: []
+        };
     },
     components: {
         NavHeader,
         NavFooter
     },
     mounted () {
-        // this.getGoodsList()
+        this.getGoodsList();
     },
     methods: {
         getGoodsList () {
-            // axios.get('../../mock/goods').then((result) => {
-            //     let res = result.data
-            //     this.goodsList = res.result
-            // })
+            axios.get("http://localhost:8090/goods").then((result) => {
+                let res = result.data;
+                this.goodsList = res.result;
+            });
         }
     }
-}
+};
 </script>
