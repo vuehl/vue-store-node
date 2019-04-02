@@ -28,7 +28,18 @@ module.exports = {
         // 設置 符號的類型 single double
         quotes: ["warn", "double"],
         // 設置前後的空格
-        "key-spacing": ["error", { "beforeColon": true }],
+        "key-spacing": ["warn", {
+            "multiLine": {
+                "beforeColon": false,
+                "afterColon": true
+        
+            },
+            "align": {
+                "beforeColon": true,
+                "afterColon": true,
+                "on": "colon"
+            }
+        }],
         // allow debugger during development
         "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
     }

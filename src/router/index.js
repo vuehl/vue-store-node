@@ -5,11 +5,11 @@ import GoodsList from "@/views/goodsList";
 Vue.use(Router);
 
 export default new Router({
-    "routes" : [
+    "routes": [
         {
-            "path" : "/",
-            "name" : "goodsList",
-            "component" : GoodsList
+            "path": "/",
+            "name": "goodsList",
+            "component": GoodsList
         }
     ]
 });
