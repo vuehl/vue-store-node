@@ -2,9 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from "vue";
 import GoodsList from "./views/goodsList";
+import VueLazyLoad from "vue-lazyload";
 import router from "./router";
 
 Vue.config.productionTip = false;
+
+Vue.use(VueLazyLoad, {
+    loading: "./../static/loading/loading-bars.svg"
+});
 
 /* eslint-disable no-new */
 new Vue({
