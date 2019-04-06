@@ -7,6 +7,7 @@ import router from "./router";
 
 Vue.config.productionTip = false;
 
+// 这个是要对我们一开始懒加载的图片地址
 Vue.use(VueLazyLoad, {
     loading: "./../static/loading/loading-bars.svg"
 });

@@ -1,0 +1,12 @@
+// 在服务端server/modules文件夹下新建goods.js文件
+const mongoose = require("mongoose");
+let Schema = mongoose.Schema;
+
+let productSchema = new Schema({ // 通过mongoose的Schema定义模板
+    "productId": String,
+    "productName": String,
+    "salePrice": Number,
+    "productImage": String
+});
+// 导出模板goods
+module.exports = mongoose.model("product", productSchema);

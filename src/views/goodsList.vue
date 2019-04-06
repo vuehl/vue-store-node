@@ -64,6 +64,8 @@ import "@/assets/css/base.css";
 import "@/assets/css/checkout.css";
 import "@/assets/css/login.css";
 import "@/assets/css/product.css";
+
+
 export default {
     data () {
         return {
@@ -104,10 +106,19 @@ export default {
     },
     methods: {
         getGoodsList () {
-            axios.get("http://localhost:8090/goods").then((result) => {
-                let res = result.data;
-                this.goodsList = res.result;
-            });
+            // axios.get("http://localhost:8090/goods").then((result) => {
+            //     let res = result.data;
+            //     this.goodsList = res.result;
+            // });
+            axios.get("/goods").then(response =>{
+                let res=response.data;
+                console.log(res);
+                if(res.status==0){
+                    this.goodsList=res.result.list;
+                }else{
+                    console.log("从服务器请求数据失败！");
+                }
+            })
         },
         setPriceFilter (index) {
             this.priceChecked = index;
