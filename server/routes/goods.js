@@ -1,6 +1,7 @@
 // 服务端server/routes/goods.js文件
 // 引入相关模块
 const express = require("express");
+
 const router = express.Router();
 const mongoose = require("mongoose");
 const Goods = require("../modules/goods"); // 引入goods模板
@@ -87,9 +88,9 @@ router.get("/list", (req, res, next) => {
 });
 
 // 获取购物车列表
-router.get("/addCart", function (req, res, next) {
-    let userId = "20150101";
-    let productId = req.query.productId;
+router.post("/addCart", function (req, res) {
+    let userId = "201513530110";
+    let productId = req.body.productId;
     let User = require("./../modules/users");
     User.findOne({"userId": userId}, function (err, userDoc) {
         if (err) {
@@ -102,9 +103,9 @@ router.get("/addCart", function (req, res, next) {
                 // 判断是否有这个商品
                 let goodItem = "";
                 userDoc.cartList.forEach((item) => {
-                    if (userDoc.productId === item.productId) {
+                    if (parseInt(productId) === parseInt(item.productId)) {
                         goodItem = item.productId;
-                        userDoc.productNum++;
+                        item.productNum++;
                     }
                 });
                 if (goodItem) {
@@ -134,7 +135,6 @@ router.get("/addCart", function (req, res, next) {
                                 doc.productNum = 1;
                                 doc.checked = 1;
                                 userDoc.cartList.push(doc);
-                                console.log(doc);
                                 userDoc.save(function (err2, doc2) {
                                     if (err2) {
                                         res.json({

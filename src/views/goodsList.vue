@@ -178,18 +178,21 @@ export default {
         loadMore () {
             this.page++;
             this.busy=false;
-            // 这个是防止鼠标下滑 进行无限次的请求事件
-            setTimeout(() => {
-                this.busy = true;
-                this.getGoodsList(true)
-            }, 1000)
+            if (this.goodsList.length >= 8) {
+                // 这个是防止鼠标下滑 进行无限次的请求事件
+                setTimeout(() => {
+                    this.busy = true;
+                    this.getGoodsList(true)
+                }, 1000)
+            }
         },
         addCartGood (productId) {
-            let param = {
-                productId: productId
+            let data = {
+                "productId": productId
             };
-            axios.get("/goods/addCart", {
-                params: param
+            axios.post("/goods/addCart", data, 
+            {
+                "Content-Type": "application/x-www-form-urlencoded"
             }).then((res, re) => {
                 if (res.data.status == 0) {
                     alert("增加成功");

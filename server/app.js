@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+let bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -16,11 +17,15 @@ app.set("views", path.join(__dirname, "views"));
 app.engine(".html", ejs.__express);
 // view engine 代表的是 视图引擎
 app.set("view engine", "html");
-
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
 // 包含文件routes/goods.js
 // 将访问路径定位到文件
 let goods = require("./routes/goods");
 app.use("/goods", goods);
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({
