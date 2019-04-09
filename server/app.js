@@ -24,7 +24,9 @@ app.use(bodyParser.json());
 // 包含文件routes/goods.js
 // 将访问路径定位到文件
 let goods = require("./routes/goods");
+let users = require("./routes/users");
 app.use("/goods", goods);
+app.use("/users", users);
 
 app.use(logger("dev"));
 app.use(express.json());

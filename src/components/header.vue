@@ -31,3 +31,21 @@
         </div>
     </header>
 </template>
+
+<script>
+export default {
+    data () {
+        return {
+            userName: "",
+            userPwd: "",
+            errorTip: false
+        };
+    },
+    methods: {
+        login () {
+            
+        }
+    }
+}
+</script>
+

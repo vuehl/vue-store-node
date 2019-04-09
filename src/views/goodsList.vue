@@ -75,9 +75,8 @@ import NavHeader from "@/components/header";
 import NavFooter from "@/components/footer";
 import axios from "axios";
 import "@/assets/css/base.css";
-import "@/assets/css/checkout.css";
-import "@/assets/css/login.css";
-import "@/assets/css/product.css";
+// import "@/assets/css/checkout.css";
+// import "@/assets/css/product.css";
 
 
 export default {
