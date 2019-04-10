@@ -5,6 +5,7 @@ import GoodsList from "./views/goodsList";
 import VueLazyLoad from "vue-lazyload";
 import infiniteScroll from "vue-infinite-scroll";
 import router from "./router";
+import BootstrapVue from "bootstrap-vue";
 
 Vue.config.productionTip = false;
 
@@ -13,6 +14,7 @@ Vue.use(VueLazyLoad, {
     loading: "./../static/loading/loading-bars.svg"
 });
 Vue.use(infiniteScroll);
+Vue.use(BootstrapVue);
 
 /* eslint-disable no-new */
 new Vue({

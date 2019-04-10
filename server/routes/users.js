@@ -5,8 +5,8 @@ let User = require("./../modules/users");
 // login
 router.post("/login", function (req, res, next) {
     let param = {
-        userName: req.body.userName,
-        userPwd : req.body.userPwd
+        "userName": req.body.userName,
+        "userPwd" : req.body.userPwd
     };
 
     User.findOne(param, function (err, doc) {
@@ -20,7 +20,7 @@ router.post("/login", function (req, res, next) {
                 path  : "/",
                 maxAge: 1000 * 60 * 60
             });
-            res.session.user = doc.userId;
+            // res.session.user = doc.userId;
             res.json({
                 status: "0",
                 msg   : "",

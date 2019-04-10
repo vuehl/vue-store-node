@@ -14,11 +14,8 @@
             <div class="filter-nav">
                 <span class="sortby">Sort by:</span>
                 <a href="javascript:void(0)" class="default cur">Default</a>
-                <a href="javascript:void(0)" class="price" @click="handleSort">
+                <a href="javascript:void(0)" class="price" @click="handlePriceSort">
                     Price 
-                    <svg class="icon icon-arrow-short">
-                        <use xlink:href="#icon-arrow-short"></use>
-                    </svg>
                 </a>
                 <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
             </div>
@@ -26,7 +23,7 @@
                 <!-- filter -->
                 <div class="filter stopPop" id="filter" :class="{'filterby-show': filterBy}">
                     <dl class="filter-price">
-                        <dt>Price:</dt>
+                        <dt>Price</dt>
                         <dd><a href="javascript:void(0)" :class="{'cur': priceChecked === 'all'}"  @click="setPriceFilter('all')">All</a></dd>
                         <dd v-for="(item, index) in priceFilter" :key="index">
                             <a href="javascript:void(0)"  @click="setPriceFilter(index)" :class="{'cur': priceChecked===index}">{{ item.startPrice }} - {{ item.endPrice }}</a>
@@ -35,6 +32,7 @@
                 </div>
 
                 <!-- search result accessories list -->
+                <!--
                 <div class="accessory-list-wrap">
                     <div class="accessory-list col-4">
                         <ul>
@@ -51,7 +49,6 @@
                                 </div>
                             </li>
                         </ul>
-                        <!-- 这个是滚动加载的插件 -->
                         <div 
                             class="loadMore"
                             v-infinite-scroll="loadMore" 
@@ -61,6 +58,37 @@
                             <img src="./../assets/loading-bubbles.svg" v-show="loading" />
                         </div>
                     </div>
+                </div>
+                -->
+                <b-container class="clearFloat">
+                    <b-row class="text-center">
+                        <b-col cols="12" sm="6" md="4" lg="4" xl="3" v-for="(item, index) in goodsList" :key="item.productId + index">
+                            <div>
+                                <b-card
+                                    :title="item.productName"
+                                    :img-src="'static/'+item.productImage"
+                                    img-alt="Image"
+                                    img-top
+                                    tag="article"
+                                    style="max-width: 20rem;"
+                                >
+                                    <b-card-text>
+                                        {{ item.salePrice }}
+                                    </b-card-text>
+                                    <b-button href="javascript:void(0);" variant="primary">加入購物車</b-button>
+                                </b-card>
+                            </div>
+                        </b-col>
+                    </b-row>
+                </b-container>
+                
+                <div 
+                    class="loadMore"
+                    v-infinite-scroll="loadMore" 
+                    infinite-scroll-disabled="busy" 
+                    infinite-scroll-distance="30"
+                >
+                    <img src="./../assets/loading-bubbles.svg" v-show="loading" />
                 </div>
             </div>
         </div>
@@ -75,9 +103,8 @@ import NavHeader from "@/components/header";
 import NavFooter from "@/components/footer";
 import axios from "axios";
 import "@/assets/css/base.css";
-// import "@/assets/css/checkout.css";
-// import "@/assets/css/product.css";
-
+import "@/assets/css/checkout.css";
+import "@/assets/css/product.css";
 
 export default {
     data () {
@@ -123,6 +150,27 @@ export default {
         this.getGoodsList(false);
     },
     methods: {
+        handlePriceSort () {
+            this.sortFlag = !this.sortFlag;
+              let param = {
+                page: 1,
+                pageSize: this.pageSize,
+                sort: this.sortFlag ? 1 : -1,
+                priceLevel: this.priceChecked
+            };
+            this.loading = true;
+            axios.get("/goods/list", {
+                params: param
+            }).then(response =>{
+                let res=response.data;
+                this.loading = false;
+                if(res.status=="0"){
+                    this.goodsList= res.result.list;
+                }else{
+                    console.log("从服务器请求数据失败！");
+                }
+            })
+        },
         getGoodsList (flag) {
             // axios.get("http://localhost:8090/goods").then((result) => {
             //     let res = result.data;
@@ -205,6 +253,12 @@ export default {
 </script>
 
 <style scoped>
+    .clearFloat::after {
+        visibility: hidden;
+        display: block;
+        content: " ";
+        clear: both;
+    }
     .loadMore {
         width: 100px;
         height: 100px;
