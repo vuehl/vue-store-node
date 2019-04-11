@@ -16,16 +16,13 @@ router.post("/login", function (req, res, next) {
                 msg   : err.message
             });
         } else {
-            res.cookie("userId", doc.userId, {
-                path  : "/",
-                maxAge: 1000 * 60 * 60
-            });
-            // res.session.user = doc.userId;
             res.json({
                 status: "0",
                 msg   : "",
                 result: {
-                    userName: doc.userName
+                    userId    : doc.userId,
+                    userName  : doc.userName,
+                    productNum: doc.cartList
                 }
             });
         }
@@ -34,14 +31,48 @@ router.post("/login", function (req, res, next) {
 
 // logout
 router.post("/logout", function (req, res, next) {
-    res.cookie("userId", "", {
-        path  : "/",
-        maxAge: -1
-    });
     res.json({
         status: "0",
         msg   : "",
         result: ""
+    });
+});
+
+// get shopCartList
+router.post("/shopCartList", function (req, res, next) {
+    let userId = req.body.userId;
+    User.findOne({"userId": userId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            res.json({
+                status: "0",
+                msg   : "success",
+                result: doc.cartList
+            });
+        }
+    });
+});
+
+// cartDel
+router.post("/cartDel", function (req, res, next) {
+    let userId = req.body.userId;
+    let productId = req.body.productId;
+    User.update({"userId": userId}, {$pull: {cartList: { "productId": productId }}}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            res.json({
+                status: "0",
+                msg   : "success"
+            });
+        }
     });
 });
 

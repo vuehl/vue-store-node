@@ -89,7 +89,7 @@ router.get("/list", (req, res, next) => {
 
 // 获取购物车列表
 router.post("/addCart", function (req, res) {
-    let userId = "201513530110";
+    let userId = req.body.userId;
     let productId = req.body.productId;
     let User = require("./../modules/users");
     User.findOne({"userId": userId}, function (err, userDoc) {
@@ -119,7 +119,7 @@ router.post("/addCart", function (req, res) {
                             res.json({
                                 status: "0",
                                 msg   : "",
-                                result: "success"
+                                result: userDoc.cartList.length
                             });
                         }
                     });
@@ -145,7 +145,7 @@ router.post("/addCart", function (req, res) {
                                         res.json({
                                             status: "0",
                                             msg   : "",
-                                            result: "success"
+                                            result: userDoc.cartList.length
                                         });
                                     }
                                 });

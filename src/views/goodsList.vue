@@ -30,36 +30,6 @@
                         </dd>
                     </dl>
                 </div>
-
-                <!-- search result accessories list -->
-                <!--
-                <div class="accessory-list-wrap">
-                    <div class="accessory-list col-4">
-                        <ul>
-                            <li v-for="item in goodsList" :key="item.productId">
-                                <div class="pic">
-                                    <a href="#"><img v-lazy="'static/'+item.productImage" alt=""></a>
-                                </div>
-                                <div class="main">
-                                    <div class="name">{{ item.productName }}</div>
-                                    <div class="price">{{ item.salePrice }}</div>
-                                    <div class="btn-area">
-                                        <a href="javascript:;" class="btn btn--m" @click="addCartGood(item.productId)">加入购物车</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div 
-                            class="loadMore"
-                            v-infinite-scroll="loadMore" 
-                            infinite-scroll-disabled="busy" 
-                            infinite-scroll-distance="30"
-                        >
-                            <img src="./../assets/loading-bubbles.svg" v-show="loading" />
-                        </div>
-                    </div>
-                </div>
-                -->
                 <b-container class="clearFloat">
                     <b-row class="text-center">
                         <b-col cols="12" sm="6" md="4" lg="4" xl="3" v-for="(item, index) in goodsList" :key="item.productId + index">
@@ -75,7 +45,7 @@
                                     <b-card-text>
                                         {{ item.salePrice }}
                                     </b-card-text>
-                                    <b-button href="javascript:void(0);" variant="primary">加入購物車</b-button>
+                                    <b-button href="javascript:void(0);" variant="primary" @click="addCartGood(item.productId)">加入購物車</b-button>
                                 </b-card>
                             </div>
                         </b-col>
@@ -172,10 +142,6 @@ export default {
             })
         },
         getGoodsList (flag) {
-            // axios.get("http://localhost:8090/goods").then((result) => {
-            //     let res = result.data;
-            //     this.goodsList = res.result;
-            // });
             let param = {
                 page: this.page,
                 pageSize: this.pageSize,
@@ -234,19 +200,26 @@ export default {
             }
         },
         addCartGood (productId) {
-            let data = {
-                "productId": productId
-            };
-            axios.post("/goods/addCart", data, 
-            {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }).then((res, re) => {
-                if (res.data.status == 0) {
-                    alert("增加成功");
-                } else {
-                    alert("添加失败");
-                }
-            })
+            let userGroup = sessionStorage.getItem("userGroup");
+            if (userGroup) {
+                let data = {
+                "productId": productId,
+                "userId": JSON.parse(userGroup).userId
+                };
+                axios.post("/goods/addCart", data, 
+                {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }).then((res, re) => {
+                    if (res.data.status == 0) {
+                        sessionStorage.setItem("productNum", res.data.result);
+                        alert("增加成功");
+                    } else {
+                        alert("添加失败");
+                    }
+                })
+            } else {
+                alert("請先登錄");
+            }
         }
     }
 };

@@ -42,6 +42,11 @@
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav class="ml-auto">
+                        <b-nav-item href="javascript:void(0);" v-if="loginUserName">
+                            <router-link to="/shopCart">
+                                購物車 <b-badge variant="light">{{ shopCartNumber }}</b-badge>
+                            </router-link>
+                        </b-nav-item>
                         <b-nav-item href="javascript:void(0);" v-if="loginUserName">你好啊, {{ loginUserName }}</b-nav-item>
                         <b-nav-item-dropdown right>
                             <template slot="button-content"><em>用戶</em></template>
@@ -50,7 +55,6 @@
                             <b-dropdown-item href="javascript:void(0);" v-if="loginUserName" @click="handleLogout">退出</b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
-                      
                 </b-collapse>
             </b-navbar>
         </b-container>
@@ -76,7 +80,8 @@ export default {
             Username: "",
             Password: "",
             showModel: false,
-            loginUserName: ""
+            loginUserName: "",
+            shopCartNumber: 0
         };
     },
     computed: {
@@ -115,6 +120,15 @@ export default {
         }
     },
     methods: {
+        init () {
+            let userGroup = sessionStorage.getItem("userGroup");
+            if (userGroup) {
+                let productNum = sessionStorage.getItem("productNum");
+                let userName = JSON.parse(userGroup).userName;
+                this.loginUserName = userName;
+                this.shopCartNumber = productNum;
+            }
+        },
         handleLogin () {
             let data = {
                 "userName": this.Username,
@@ -125,10 +139,18 @@ export default {
             }).then((response, reject) => {
                 let res = response.data;
                 if (res.status === "0") {
+                    let userGroup = {
+                        userName: res.result.userName,
+                        userId  : res.result.userId
+                    };
+                    sessionStorage.setItem("userGroup", JSON.stringify(userGroup));
+                    sessionStorage.setItem("productNum", res.result.productNum.length);
+                    // 關閉模態框
                     this.showModel = false;
                     this.Username= "";
                     this.Password="";
                     this.loginUserName = res.result.userName;
+                    this.shopCartNumber = res.result.productNum.length;
                 } else {
                     this.Username= "";
                     this.Password="";
@@ -136,13 +158,17 @@ export default {
             });
         },
         handleLogout () {
-             axios.post("/users/logout").then((response, reject) => {
+            axios.post("/users/logout").then((response, reject) => {
+                sessionStorage.removeItem("userGroup");
                 let res = response.data;
                 if (res.status === "0") {
                     this.loginUserName = "";
                 }
             });
         }
+    },
+    mounted () {
+       this.init();
     }
 }
 </script>
