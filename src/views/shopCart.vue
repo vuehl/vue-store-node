@@ -19,17 +19,13 @@
                             <img slot="aside" :src="'static/'+item.productImage" width="80px" height="80px" alt="Media Aside">
                             <ul class="cart">
                                 <li>
-                                    <b-form-group>
-                                        <b-form-checkbox-group>
-                                            <b-form-checkbox></b-form-checkbox>
-                                        </b-form-checkbox-group>
-                                    </b-form-group>
+                                    <input type="checkbox" :checked="item.checked === 1" @click="editCart('checked', item)"/>
                                 </li>
                                 <li>{{ item.productName }}</li>
                                 <li>
-                                    <b-button variant="outline-primary">-</b-button>
+                                    <b-button variant="outline-primary" @click="editCart('minu', item)">-</b-button>
                                         {{ item.productNum }}
-                                    <b-button variant="outline-primary">+</b-button>
+                                    <b-button variant="outline-primary" @click="editCart('add', item)">+</b-button>
                                 </li>
                                 <li>{{ item.salePrice }}</li>
                                 <li @click="handleCartActicle(item.productId)"><i class="fa fa-trash-o fa-2x" style="cursor: pointer;"></i></li>
@@ -62,14 +58,6 @@ export default {
     },
     mounted() {
         this.handleShopCart();
-    },
-    computed: {
-        // countCutBack (productNum) {
-        //     return productNum--;
-        // },
-        // countAdd (productNum) {
-        //     return productNum++;
-        // }
     },
     methods: {
         handleShopCart () {
@@ -105,6 +93,31 @@ export default {
                     }
                 });
             }
+        },
+        editCart (flag, item) {
+            if (flag === "minu") {
+                if (item.productNum <= 1) {
+                    return;
+                }
+                item.productNum--;
+            } else if (flag === "add"){
+                item.productNum++;
+            } else {
+                item.checked= item.checked == 1 ? 0 : 1;
+            }
+            let userGroup = sessionStorage.getItem("userGroup");
+            let data = {
+                "userId": JSON.parse(userGroup).userId,
+                "productId": item.productId,
+                "productNum": item.productNum,
+                "checked": item.checked
+            };
+
+            axios.post("/users/editCart", data, {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }).then((response, reject) => {
+                
+            });
         }
     }
 };

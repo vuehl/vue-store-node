@@ -1,7 +1,7 @@
 <template>
    <div class="header-root">
         <!-- 這個是模態狂 -->
-        <b-modal id="modal-scrollable" scrollable title="Scrollable Content" v-model="showModel">
+        <b-modal id="modal-scrollable" scrollable title="Login" v-model="showModel">
             <div>
                 <b-form-group
                     id="fieldset-1"
@@ -42,10 +42,8 @@
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav class="ml-auto">
-                        <b-nav-item href="javascript:void(0);" v-if="loginUserName">
-                            <router-link to="/shopCart">
+                        <b-nav-item href="javascript:void(0);" v-if="loginUserName" @click="shopCart">
                                 購物車 <b-badge variant="light">{{ shopCartNumber }}</b-badge>
-                            </router-link>
                         </b-nav-item>
                         <b-nav-item href="javascript:void(0);" v-if="loginUserName">你好啊, {{ loginUserName }}</b-nav-item>
                         <b-nav-item-dropdown right>
@@ -128,6 +126,11 @@ export default {
                 this.loginUserName = userName;
                 this.shopCartNumber = productNum;
             }
+        },
+        shopCart () {
+            this.$router.push({
+                path: "/shopCart"
+            });
         },
         handleLogin () {
             let data = {

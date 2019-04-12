@@ -3,18 +3,18 @@ let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 
 let usersSchema = new Schema({
-    "userId": String,
-    "userName": String,
-    "userPwd": String,
+    "userId"   : String,
+    "userName" : String,
+    "userPwd"  : String,
     "orderList": Array,
-    "cartList": [
+    "cartList" : [
         {
-            "productId": String,
-            "productName": String,
+            "productId"   : String,
+            "productName" : String,
             "productImage": String,
-            "salePrice": String,
-            "checked": Number,
-            "productNum": Number
+            "salePrice"   : Number,
+            "checked"     : Number,
+            "productNum"  : Number
         }
     ],
     "addressList": Array

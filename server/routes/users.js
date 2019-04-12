@@ -76,4 +76,25 @@ router.post("/cartDel", function (req, res, next) {
     });
 });
 
+// editCart 在作爲i調教查詢的時候,子節點是不需要$符號的
+router.post("/editCart", function (req, res, next) {
+    let userId = req.body.userId;
+    let productId = req.body.productId;
+    let productNum = req.body.productNum;
+    let checked = req.body.checked;
+    User.update({"userId": userId, "cartList.productId": productId}, {$set: {"cartList.$.productNum": productNum, "cartList.$.checked": checked}}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            res.json({
+                status: "0",
+                msg   : "success"
+            });
+        }
+    });
+});
+
 module.exports = router;
