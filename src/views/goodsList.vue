@@ -122,7 +122,7 @@ export default {
     methods: {
         handlePriceSort () {
             this.sortFlag = !this.sortFlag;
-              let param = {
+            let param = {
                 page: 1,
                 pageSize: this.pageSize,
                 sort: this.sortFlag ? 1 : -1,

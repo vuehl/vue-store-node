@@ -38,7 +38,7 @@
         </b-modal>
         <b-container>
             <b-navbar toggleable="lg" type="dark" variant="info">
-                <b-navbar-brand href="/">HL Store</b-navbar-brand>
+                <b-navbar-brand href="/">YaoBai Store</b-navbar-brand>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav class="ml-auto">
