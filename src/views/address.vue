@@ -36,7 +36,7 @@
             <div class="addr-list-wrap">
                 <div class="addr-list">
                     <ul>
-                        <li v-for="(item, index) in addressList" :key="item.addressId + index" :class="{'selectIndex': selectIndex==index}" @click="handleSelectIndex(index)">
+                        <li v-for="(item, index) in addressList" :key="item.addressId + index" :class="{'selectIndex': selectIndex==index}" @click="handleSelectIndex(index, item.addressId)">
                             <dl>
                                 <dt>{{ item.userName }}</dt>
                                 <dd class="address">{{ item.streeName }}</dd>
@@ -94,7 +94,11 @@
                     </div>
                 </div>
                 <div class="next-btn-wrap">
-                    <a class="btn btn--m btn--red" href="#">Next</a>
+                    <a class="btn btn--m btn--red" href="javascript:void(0);">
+                        <router-link :to="{'path': '/orderConfirm', 'query': {'addressId': this.addressId}}">
+                            Next
+                        </router-link>
+                    </a>
                 </div>
             </div>
         </div>
@@ -118,7 +122,8 @@ export default {
     data () {
         return {
             addressList: [],
-            selectIndex: 0
+            selectIndex: 0,
+            addressId  : ""
         };
     },
     components: {
@@ -139,22 +144,30 @@ export default {
                 let res = response.data;
                 if (res.status == "0") {
                     this.addressList = res.result;
+                    let _addressId = "";
+                    res.result.forEach(function (item) {
+                        if (item.isDefault == true) {
+                            _addressId = item.addressId;
+                        }
+                    });
+                    this.addressId = _addressId;
                 }
             });
         },
-        handleSelectIndex (index) {
+        handleSelectIndex (index, addressId) {
             this.selectIndex = index;
+            this.addressId = addressId;
         },
         handleSetDefaultAddress (addressId) {
             let data = {
-                "userId": JSON.parse(userGroup).userId,
+                "userId"   : JSON.parse(userGroup).userId,
                 "addressId": addressId
             };
             axios.post("/users/setDefaultAddress", 
                 data
-            ,{
-                "Content-Type": "application/x-www-form-urlencoded"
-            }).then((response) => {
+                ,{
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }).then((response) => {
                 let res = response.data;
                 if (res.status == "0") {
                     this.init();
@@ -165,18 +178,18 @@ export default {
             let confirm = window.confirm("你确认要删除该地址嘛?");
             if (confirm) {
                 let data = {
-                "userId": JSON.parse(userGroup).userId,
-                "addressId": addressId
+                    "userId": JSON.parse(userGroup).userId,
+                    "addressId": addressId
                 };
                 axios.post("/users/deleteAddress", 
                     data
-                ,{
+                    ,{
                     "Content-Type": "application/x-www-form-urlencoded"
-                }).then((response) => {
-                    let res = response.data;
-                    if (res.status == "0") {
-                        this.init();
-                    }
+                    }).then((response) => {
+                        let res = response.data;
+                        if (res.status == "0") {
+                            this.init();
+                        }
                 });
             }
         }

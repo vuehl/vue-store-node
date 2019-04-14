@@ -79,37 +79,37 @@ import "@/assets/css/product.css";
 export default {
     data () {
         return {
-            goodsList: [],
+            goodsList  : [],
             priceFilter: [
                 {
                     startPrice: "0.00",
-                    endPrice: '500.00'
+                    endPrice  : '500.00'
                 },
                 {
                     startPrice: "500.00",
-                    endPrice: "1000.00"
+                    endPrice  : "1000.00"
                 },
                 {
                     startPrice: "1000.00",
-                    endPrice: "1500.00"
+                    endPrice  : "1500.00"
                 },
                 {
                     startPrice: "1500.00",
-                    endPrice: "2000.00"
+                    endPrice  : "2000.00"
                 },
                 {
                     startPrice: "2000.00",
-                    endPrice: "2500.00"
+                    endPrice  : "2500.00"
                 }
             ],
             priceChecked: "all",
-            loading: false,
-            busy: false,
-            overlayFlag: false,
-            filterBy: false,
-            page: 1,
-            pageSize: 8,
-            sortFlag: true
+            loading     : false,
+            busy        : false,
+            overlayFlag : false,
+            filterBy    : false,
+            page        : 1,
+            pageSize    : 8,
+            sortFlag    : true
         };
     },
     components: {

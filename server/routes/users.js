@@ -1,6 +1,7 @@
-var express = require("express");
-var router = express.Router();
+let express = require("express");
+let router = express.Router();
 let User = require("./../modules/users");
+let Format = require("./../util/util");
 
 // login
 router.post("/login", function (req, res, next) {
@@ -165,6 +166,69 @@ router.post("/deleteAddress", function (req, res, next) {
             res.json({
                 status: "0",
                 msg   : "success"
+            });
+        }
+    });
+});
+
+// set orderSuccess
+router.post("/orderSuccess", function (req, res, next) {
+    let userId = req.body.userId;
+    let addressId = req.body.addressId;
+    let orderTotal = req.body.orderTotal;
+    User.findOne({"userId": userId, "addressList.addressId": addressId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            let goodsList = [];
+            let address = [];
+            doc.cartList.forEach((item) => {
+                if (item.checked === 1) {
+                    goodsList.push(item);
+                }
+            });
+
+            doc.addressList.forEach((item) => {
+                if (item.addressId === addressId) {
+                    address.push(item);
+                }
+            });
+
+            let sysData = Format.dateNumber();
+            let createData = Format.date();
+            let r1 = Math.floor(Math.random() * 100);
+            let r2 = Math.floor(Math.random() * 100);
+            let preStore = "622";
+
+            let orderId = preStore + r1 + sysData + r2;
+            let order = {
+                orderId    : orderId,
+                orderTotal : orderTotal,
+                addressInfo: address,
+                orderStatus: "1",
+                createData : createData
+            };
+
+            doc.orderList.push(order);
+            doc.save(function (err1, doc1) {
+                if (err1) {
+                    res.json({
+                        status: "1",
+                        msg   : err1.message
+                    });
+                } else {
+                    res.json({
+                        status: "0",
+                        msg   : "success",
+                        result: {
+                            "orderTotal": orderTotal,
+                            "orderId"   : orderId
+                        }
+                    });
+                }
             });
         }
     });

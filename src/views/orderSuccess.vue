@@ -20,15 +20,23 @@
             <div class="order-create-main">
             <h3>Congratulations! <br>Your order is under processing!</h3>
             <p>
-                <span>Order ID：62000000000</span>
-                <span>Order total：5230</span>
+                <span>Order ID：{{ this.orderId}}</span>
+                <span>Order total：{{ this.orderTotal }}</span>
             </p>
             <div class="order-create-btn-wrap">
                 <div class="btn-l-wrap">
-                <a class="btn btn--m">Cart List</a>
+                    <a class="btn btn--m">
+                        <router-link to="/shopCart">
+                            Cart List
+                        </router-link>
+                    </a>
                 </div>
                 <div class="btn-r-wrap">
-                <a class="btn btn--m">Goods List</a>
+                    <a class="btn btn--m">
+                        <router-link to="/">
+                            Goods List
+                        </router-link>
+                    </a>
                 </div>
             </div>
             </div>
@@ -46,14 +54,36 @@ import axios from "axios";
 export default {
     data () {
         return {
-            addressList: []
+            orderTotal: 0,
+            orderId   : ""
         };
     },
     components: {
         NavHeader,
         NavFooter
     },
+    mounted () {
+        this.init();
+    },
     methods: {
+        init () {
+            let userGroup = sessionStorage.getItem("userGroup");
+            let data = {
+                "userId"    : JSON.parse(userGroup).userId,
+                "orderTotal": this.$route.query.orderTotal,
+                "addressId" : this.$route.query.addressId
+            };
+            console.log(data);
+            axios.post("/users/orderSuccess", data, {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }).then((response) => {
+                let res = response.data;
+                if (res.status == 0) {
+                    this.orderTotal = res.result.orderTotal;
+                    this.orderId = res.result.orderId;
+                }
+            });
+        }
     }
 }
 </script>

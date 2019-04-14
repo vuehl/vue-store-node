@@ -75,10 +75,10 @@ import axios from "axios";
 export default {
     data () {
         return {
-            Username: "",
-            Password: "",
-            showModel: false,
-            loginUserName: "",
+            Username      : "",
+            Password      : "",
+            showModel     : false,
+            loginUserName : "",
             shopCartNumber: 0
         };
     },

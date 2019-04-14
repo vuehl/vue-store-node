@@ -16,12 +16,20 @@
         </div>
 
         <div class="order-foot-wrap">
-                <div class="prev-btn-wrap">
-                    <a class="btn btn--m">Previous</a>
-                </div>
-                <div class="next-btn-wrap">
-                    <button class="btn btn--m btn--red">Proceed to payment</button>
-                </div>
+            <div class="prev-btn-wrap">
+                <a class="btn btn--m">
+                    <router-link to="/OrderConfirm">
+                        Previous
+                    </router-link>
+                </a>
+            </div>
+            <div class="next-btn-wrap">
+                <button class="btn btn--m btn--red">
+                    <router-link :to="{'path': '/OrderSuccess', 'query': {'orderTotal': this.orderTotal, 'addressId': this.addressId}}">
+                        Proceed to payment
+                    </router-link>
+                </button>
+            </div>
         </div>
     </div>
     <nav-footer />
@@ -36,14 +44,22 @@ import axios from "axios";
 export default {
     data () {
         return {
-            addressList: []
+            orderTotal: 0,
+            addressId : ""
         };
     },
     components: {
         NavHeader,
         NavFooter
     },
+    mounted () {
+        this.init();
+    },
     methods: {
+        init () {
+            this.orderTotal = this.$route.query.orderTotal;
+            this.addressId  = this.$route.query.addressId;
+        }
     }
 }
 </script>

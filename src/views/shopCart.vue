@@ -126,7 +126,7 @@ export default {
     data () {
         return {
             shopCartList: [],
-            itemTotal: 10
+            itemTotal   : 10
         }
     },
     components: {
@@ -144,9 +144,10 @@ export default {
             };
             axios.post("/users/shopCartList", 
                 data
-            ,{
-                "Content-Type": "application/x-www-form-urlencoded"
-            }).then((response, reject) => {
+                ,{
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+                ).then((response, reject) => {
                 let res = response.data;
                 if (res.status === "0") {
                     this.shopCartList = res.result;
