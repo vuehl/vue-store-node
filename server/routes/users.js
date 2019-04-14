@@ -234,4 +234,33 @@ router.post("/orderSuccess", function (req, res, next) {
     });
 });
 
+// set orderDetail
+router.post("/orderDetail", function (req, res, next) {
+    let userId = req.body.userId;
+    let orderId = req.body.orderId;
+    User.findOne({"userId": userId, "orderList.orderId": orderId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            let orderTotal = 0;
+            doc.orderList.forEach((item) => {
+                if (item.orderId === orderId) {
+                    orderTotal = item.orderTotal;
+                }
+            });
+            res.json({
+                status: "0",
+                msg   : "success",
+                result: {
+                    orderId   : orderId,
+                    orderTotal: orderTotal
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

@@ -134,10 +134,10 @@ export default {
         NavFooter
     },
     mounted() {
-        this.handleShopCart();
+        this.init();
     },
     methods: {
-        handleShopCart () {
+        init () {
             let userGroup = sessionStorage.getItem("userGroup");
             let data = {
                 "userId": JSON.parse(userGroup).userId
@@ -166,7 +166,7 @@ export default {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }).then((response, reject) => {
                     if (response.data.status === "0") {
-                        this.handleShopCart();
+                        this.init();
                         alert("刪除成功");
                     }
                 });

@@ -69,12 +69,10 @@ export default {
         init () {
             let userGroup = sessionStorage.getItem("userGroup");
             let data = {
-                "userId"    : JSON.parse(userGroup).userId,
-                "orderTotal": this.$route.query.orderTotal,
-                "addressId" : this.$route.query.addressId
+                "userId" : JSON.parse(userGroup).userId,
+                "orderId": this.$route.query.orderId
             };
-            console.log(data);
-            axios.post("/users/orderSuccess", data, {
+            axios.post("/users/orderDetail", data, {
                 "Content-Type": "application/x-www-form-urlencoded"
             }).then((response) => {
                 let res = response.data;

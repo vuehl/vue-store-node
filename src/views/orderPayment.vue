@@ -25,7 +25,7 @@
             </div>
             <div class="next-btn-wrap">
                 <button class="btn btn--m btn--red">
-                    <router-link :to="{'path': '/OrderSuccess', 'query': {'orderTotal': this.orderTotal, 'addressId': this.addressId}}">
+                    <router-link :to="{'path': '/OrderSuccess', 'query': {'orderTotal': this.orderTotal, 'orderId': this.orderId}}">
                         Proceed to payment
                     </router-link>
                 </button>
@@ -45,7 +45,7 @@ export default {
     data () {
         return {
             orderTotal: 0,
-            addressId : ""
+            orderId   : ""
         };
     },
     components: {
@@ -57,8 +57,21 @@ export default {
     },
     methods: {
         init () {
-            this.orderTotal = this.$route.query.orderTotal;
-            this.addressId  = this.$route.query.addressId;
+            let userGroup = sessionStorage.getItem("userGroup");
+            let data = {
+                "userId"    : JSON.parse(userGroup).userId,
+                "orderTotal": this.$route.query.orderTotal,
+                "addressId" : this.$route.query.addressId
+            };
+            axios.post("/users/orderSuccess", data, {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }).then((response) => {
+                let res = response.data;
+                if (res.status == 0) {
+                    this.orderTotal = res.result.orderTotal;
+                    this.orderId = res.result.orderId;
+                }
+            });
         }
     }
 }
