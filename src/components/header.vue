@@ -21,7 +21,7 @@
                     :valid-feedback="PasswordValidFeedback"
                     :state="PasswordState"
                 >
-                    <b-form-input id="Password" v-model="Password" :state="PasswordState" trim></b-form-input>
+                    <b-form-input id="Password" v-model="Password" :state="PasswordState" trim @keyup.enter="handleLogin"></b-form-input>
                 </b-form-group>
             </div>
              <div slot="modal-footer" class="w-100">
@@ -43,7 +43,7 @@
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav class="ml-auto">
                         <b-nav-item href="javascript:void(0);" v-if="loginUserName" @click="shopCart">
-                                購物車 <b-badge variant="light">{{ shopCartNumber }}</b-badge>
+                            購物車 <b-badge variant="light">{{ shopCartNumber }}</b-badge>
                         </b-nav-item>
                         <b-nav-item href="javascript:void(0);" v-if="loginUserName">你好啊, {{ loginUserName }}</b-nav-item>
                         <b-nav-item-dropdown right>
@@ -78,8 +78,7 @@ export default {
             Username      : "",
             Password      : "",
             showModel     : false,
-            loginUserName : "",
-            shopCartNumber: 0
+            loginUserName : ""
         };
     },
     computed: {
@@ -115,16 +114,20 @@ export default {
         },
         PasswordValidFeedback() {
             return this.PasswordState === true ? 'Thank you' : ''
+        },
+        shopCartNumber () {
+            return this.$store.state.shopCart;
         }
     },
     methods: {
         init () {
             let userGroup = sessionStorage.getItem("userGroup");
             if (userGroup) {
-                let productNum = sessionStorage.getItem("productNum");
                 let userName = JSON.parse(userGroup).userName;
+                let userId = JSON.parse(userGroup).userId;
                 this.loginUserName = userName;
-                this.shopCartNumber = productNum;
+                // 拿到購物車的數量 
+                this.getCartCount(userId);
             }
         },
         shopCart () {
@@ -147,13 +150,13 @@ export default {
                         userId  : res.result.userId
                     };
                     sessionStorage.setItem("userGroup", JSON.stringify(userGroup));
-                    sessionStorage.setItem("productNum", res.result.productNum.length);
                     // 關閉模態框
                     this.showModel = false;
                     this.Username= "";
                     this.Password="";
                     this.loginUserName = res.result.userName;
-                    this.shopCartNumber = res.result.productNum.length;
+                    // 執行查找購物車數量的方法
+                    this.getCartCount(res.result.userId);
                 } else {
                     this.Username= "";
                     this.Password="";
@@ -166,6 +169,21 @@ export default {
                 let res = response.data;
                 if (res.status === "0") {
                     this.loginUserName = "";
+                    // 跳轉到首頁
+                    this.$router.push({"path": "/"});
+                }
+            });
+        },
+        getCartCount (userId) {
+            // 獲取商品的數量
+            axios.post("/goods/getShopCartNum", {
+                userId  : userId
+            }, {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }).then((response) => {
+                let res = response.data;
+                if (res.status === "0") {
+                    this.$store.commit("updateCartNum" , {type: "init", num: res.result.productNum, price: res.result.totalPrice});
                 }
             });
         }

@@ -147,6 +147,9 @@ export default {
     methods: {
         init () {
             let userGroup = sessionStorage.getItem("userGroup");
+            if (!userGroup) {
+                return;
+            }
             let data = {
                 "userId": JSON.parse(userGroup).userId
             };

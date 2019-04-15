@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Goods = require("../modules/goods"); // 引入goods模板
+let User = require("./../modules/users");
 
 // 连接本地mongodb数据库的store
 mongoose.connect("mongodb://localhost:27017/store");
@@ -91,7 +92,7 @@ router.get("/list", (req, res, next) => {
 router.post("/addCart", function (req, res) {
     let userId = req.body.userId;
     let productId = req.body.productId;
-    let User = require("./../modules/users");
+
     User.findOne({"userId": userId}, function (err, userDoc) {
         if (err) {
             res.json({
@@ -154,6 +155,37 @@ router.post("/addCart", function (req, res) {
                     });
                 }
             }
+        }
+    });
+});
+
+// get shopcart number
+router.post("/getShopCartNum", function (req, res) {
+    let userId = req.body.userId;
+    User.findOne({"userId": userId}, function (err, userDoc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            let productNum = 0;
+            let price = 0;
+            userDoc.cartList.forEach((item) => {
+                productNum += parseInt(item.productNum);
+                if (item.checked === 1) {
+                    price += item.productNum * item.salePrice;
+                }
+            });
+
+            res.json({
+                status: "0",
+                msg   : "success",
+                result: {
+                    productNum: productNum,
+                    totalPrice: price
+                }
+            });
         }
     });
 });

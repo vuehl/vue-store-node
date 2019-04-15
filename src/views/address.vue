@@ -44,7 +44,7 @@
                             </dl>
                             <div class="addr-opration addr-del">
                                 <a href="javascript:;" class="addr-del-btn" @click="handleDeleteAddress(item.addressId)">
-                                    删除
+                                    <i class="fa fa-trash-o fa-lg"></i>
                                 </a>
                             </div>
                             <div class="addr-opration addr-default" v-show="!item.isDefault">
@@ -58,7 +58,7 @@
                         </li>
                         <li class="addr-new">
                             <div class="add-new-inner">
-                                
+                                <i class="fa fa-plus fa-5x"></i>
                                 <p>Add new address</p>
                             </div>
                         </li>
@@ -135,6 +135,9 @@ export default {
     },
     methods: {
         init () {
+            if (!userGroup) {
+                return;
+            }
             let param = {
                 "userId": JSON.parse(userGroup).userId
             };
@@ -159,6 +162,9 @@ export default {
             this.addressId = addressId;
         },
         handleSetDefaultAddress (addressId) {
+            if (!userGroup) {
+                return;
+            }
             let data = {
                 "userId"   : JSON.parse(userGroup).userId,
                 "addressId": addressId
@@ -175,6 +181,9 @@ export default {
             });
         },
         handleDeleteAddress (addressId) {
+            if (!userGroup) {
+                return;
+            }
             let confirm = window.confirm("你确认要删除该地址嘛?");
             if (confirm) {
                 let data = {

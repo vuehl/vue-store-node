@@ -45,7 +45,7 @@
                                     <b-card-text>
                                         {{ item.salePrice }}
                                     </b-card-text>
-                                    <b-button href="javascript:void(0);" variant="primary" @click="addCartGood(item.productId)">加入購物車</b-button>
+                                    <b-button href="javascript:void(0);" variant="primary" @click="addCartGood(item.productId, item.salePrice)">加入購物車</b-button>
                                 </b-card>
                             </div>
                         </b-col>
@@ -75,6 +75,7 @@ import axios from "axios";
 import "@/assets/css/base.css";
 import "@/assets/css/checkout.css";
 import "@/assets/css/product.css";
+let userGroup = sessionStorage.getItem("userGroup");
 
 export default {
     data () {
@@ -199,19 +200,18 @@ export default {
                 }, 1000)
             }
         },
-        addCartGood (productId) {
-            let userGroup = sessionStorage.getItem("userGroup");
+        addCartGood (productId, salePrice) {
             if (userGroup) {
                 let data = {
-                "productId": productId,
-                "userId": JSON.parse(userGroup).userId
+                    "productId": productId,
+                    "userId": JSON.parse(userGroup).userId
                 };
                 axios.post("/goods/addCart", data, 
                 {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }).then((res, re) => {
                     if (res.data.status == 0) {
-                        sessionStorage.setItem("productNum", res.data.result);
+                        this.$store.commit("updateCartNum" , {type: "add", num: 1, price: salePrice, "selected": true});
                         alert("增加成功");
                     } else {
                         alert("添加失败");

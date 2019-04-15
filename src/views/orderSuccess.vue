@@ -50,7 +50,7 @@ import NavHeader from "@/components/header";
 import NavFooter from "@/components/footer";
 import "@/assets/css/font-awesome.min.css";
 import axios from "axios";
-
+let userGroup = sessionStorage.getItem("userGroup");
 export default {
     data () {
         return {
@@ -67,7 +67,9 @@ export default {
     },
     methods: {
         init () {
-            let userGroup = sessionStorage.getItem("userGroup");
+            if (!userGroup) {
+                return;
+            }
             let data = {
                 "userId" : JSON.parse(userGroup).userId,
                 "orderId": this.$route.query.orderId

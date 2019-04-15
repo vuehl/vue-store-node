@@ -21,9 +21,8 @@ router.post("/login", function (req, res, next) {
                 status: "0",
                 msg   : "",
                 result: {
-                    userId    : doc.userId,
-                    userName  : doc.userName,
-                    productNum: doc.cartList
+                    userId  : doc.userId,
+                    userName: doc.userName
                 }
             });
         }
@@ -49,10 +48,19 @@ router.post("/shopCartList", function (req, res, next) {
                 msg   : err.message
             });
         } else {
+            let isCheckedAll = true;
+            doc.cartList.forEach((item) => {
+                if (item.checked === 0) {
+                    isCheckedAll = false;
+                }
+            });
             res.json({
                 status: "0",
                 msg   : "success",
-                result: doc.cartList
+                result: {
+                    cartList    : doc.cartList,
+                    isCheckedAll: isCheckedAll
+                }
             });
         }
     });
@@ -94,6 +102,62 @@ router.post("/editCart", function (req, res, next) {
                 status: "0",
                 msg   : "success"
             });
+        }
+    });
+});
+
+// set checkedAll cartShop
+router.post("/checkedAll", function (req, res, next) {
+    let userId = req.body.userId;
+    let isChecked = req.body.isChecked;
+    User.findOne({"userId": userId}, function (err, doc) {
+        if (err) {
+            res.json({
+                status: "1",
+                msg   : err.message
+            });
+        } else {
+            if (isChecked) {
+                doc.cartList.forEach((item) => {
+                    item.checked = 1;
+                });
+                doc.save((err2, doc2) => {
+                    if (err2) {
+                        res.json({
+                            status: "1",
+                            msg   : err.message
+                        });
+                    } else {
+                        res.json({
+                            status: "0",
+                            msg   : "success",
+                            result: {
+                                shopCartList: doc2.cartList
+                            }
+                        });
+                    }
+                });
+            } else {
+                doc.cartList.forEach((item) => {
+                    item.checked = 0;
+                });
+                doc.save((err3, doc3) => {
+                    if (err3) {
+                        res.json({
+                            status: "1",
+                            msg   : err.message
+                        });
+                    } else {
+                        res.json({
+                            status: "0",
+                            msg   : "success",
+                            result: {
+                                shopCartList: doc3.cartList
+                            }
+                        });
+                    }
+                });
+            }
         }
     });
 });
