@@ -1,6 +1,6 @@
 # vue-store
 
-> this is a store.
+> this is a store app use node + mongodb technology.
 
 ## Build Setup
 
