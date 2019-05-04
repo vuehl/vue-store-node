@@ -17,14 +17,21 @@ router.post("/login", function (req, res, next) {
                 msg   : err.message
             });
         } else {
-            res.json({
-                status: "0",
-                msg   : "",
-                result: {
-                    userId  : doc.userId,
-                    userName: doc.userName
-                }
-            });
+            if (doc) {
+                res.json({
+                    status: "0",
+                    msg   : "",
+                    result: {
+                        userId  : doc.userId,
+                        userName: doc.userName
+                    }
+                });
+            } else {
+                res.json({
+                    status: "1",
+                    msg   : "账号或密码错误"
+                });
+            }
         }
     });
 });
@@ -70,7 +77,7 @@ router.post("/shopCartList", function (req, res, next) {
 router.post("/cartDel", function (req, res, next) {
     let userId = req.body.userId;
     let productId = req.body.productId;
-    User.findOne({"userId": userId}, {$pull: {cartList: { "productId": productId }}}, function (err, doc) {
+    User.update({"userId": userId}, {$pull: {cartList: { "productId": productId }}}, function (err, doc) {
         if (err) {
             res.json({
                 status: "1",

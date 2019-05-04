@@ -3,6 +3,7 @@
         <!-- 這個是模態狂 -->
         <b-modal id="modal-scrollable" scrollable title="Login" v-model="showModel">
             <div>
+                <h5 v-if="errorInfo" style="color: red;">{{errorInfo}}</h5>
                 <b-form-group
                     id="fieldset-1"
                     label="Username"
@@ -78,7 +79,8 @@ export default {
             Username      : "",
             Password      : "",
             showModel     : false,
-            loginUserName : ""
+            loginUserName : "",
+            errorInfo: null
         };
     },
     computed: {
@@ -157,9 +159,11 @@ export default {
                     this.loginUserName = res.result.userName;
                     // 執行查找購物車數量的方法
                     this.getCartCount(res.result.userId);
+                    // 把错误信息清空
+                    this.errorInfo = null;
                 } else {
-                    this.Username= "";
                     this.Password="";
+                    this.errorInfo = res.msg;
                 }
             });
         },

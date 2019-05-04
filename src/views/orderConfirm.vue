@@ -160,9 +160,9 @@ export default {
                 }).then((response, reject) => {
                 let res = response.data;
                 if (res.status === "0") {
-                    this.shopCartList = res.result;
+                    this.shopCartList = res.result.cartList;
                     let itemSubtotal = 0;
-                    res.result.forEach(function (item) {
+                    res.result.cartList.forEach(function (item) {
                         if (item.checked == 1) {
                             itemSubtotal += item.productNum * item.salePrice;
                         }
