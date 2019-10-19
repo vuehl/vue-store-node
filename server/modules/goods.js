@@ -11,4 +11,4 @@ let productSchema = new Schema({ // 通过mongoose的Schema定义模板
     "productNum"  : Number
 });
 // 导出模板goods, 第三个参数是集合的名字,如果不写的话,就默认在Product后面加上一个s
-module.exports = mongoose.model("Product", productSchema, "product");
+module.exports = mongoose.model("Product", productSchema, "products");

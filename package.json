@@ -17,7 +17,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "jquery": "^2.2.3",
-    "mongoose": "^5.4.22",
+    "mongoose": "^5.7.5",
     "vue": "^2.6.10",
     "vue-infinite-scroll": "^2.0.2",
     "vue-lazyload": "^1.2.6",
