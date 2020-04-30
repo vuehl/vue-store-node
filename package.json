@@ -16,7 +16,7 @@
     "bootstrap-vue": "^2.0.0-rc.18",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "jquery": "^2.2.3",
+    "jquery": "^3.5.0",
     "mongoose": "^5.7.5",
     "vue": "^2.6.10",
     "vue-infinite-scroll": "^2.0.2",
